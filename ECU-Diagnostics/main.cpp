@@ -5,6 +5,9 @@
 #include <QTimer>
 #include <QObject>
 #include <QQmlContext>
+#include <iostream>
+#include "database/DatabaseManager.h"
+using namespace std;
 
 class AppController :public QObject{
     Q_OBJECT
@@ -19,6 +22,7 @@ class AppController :public QObject{
 
 int main(int argc, char *argv[])
 {
+    DatabaseManager db;
     QGuiApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
@@ -26,6 +30,14 @@ int main(int argc, char *argv[])
     AppController controller;
 
     engine.rootContext()->setContextProperty("appController", &controller);
+
+    if(db.connect()){
+        db.fetchMachineCategories();
+    }
+    else{
+        cout<<"Error database not found"<<endl;
+    }
+
 
     QObject::connect(
         &engine,
