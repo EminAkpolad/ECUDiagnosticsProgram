@@ -6,15 +6,20 @@
 #include <sqlext.h>
 #include <iostream>
 #include <string>
+#include <QObject>
+#include <QVariantMap>
+#include <QString>
 
-class DatabaseManager{
-    private:
+class DatabaseManager : public QObject {
+    Q_OBJECT
+
+private:
     SQLHENV hEnv;
     SQLHDBC hDbc;
     bool isConnected;
 
-    public:
-    DatabaseManager();
+public:
+    DatabaseManager(QObject *parent = nullptr);
     ~DatabaseManager();
 
     bool connect();
@@ -22,5 +27,8 @@ class DatabaseManager{
     bool getStatus() const;
 
     bool fetchMachineCategories();
+
+    Q_INVOKABLE QVariantMap scanAndDetectECU(QString ecuSignature);
 };
-#endif
+
+#endif 

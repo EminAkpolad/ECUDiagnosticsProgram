@@ -2,7 +2,31 @@
 #include <iostream>
 using namespace std;
 
-DatabaseManager::DatabaseManager() : hEnv(NULL),hDbc(NULL),isConnected(false){
+
+QVariantMap DatabaseManager::scanAndDetectECU(QString ecuSignature){
+    QVariantMap vehicleData;
+    if(!isConnected){
+        connect();
+    }
+
+    if(!isConnected){
+        vehicleData["status"]="error";
+        vehicleData["message"]="Veritabani baglantisi kurulamadi";
+        return vehicleData;
+    }
+
+    vehicleData["status"]="Success";
+    vehicleData["ecuModel"]="Bosch EDC17CV41";
+    vehicleData["vehicleInfo"]="Agir Is Makinesi";
+    vehicleData["faultCode"]="P0234";
+    vehicleData["description"]="Turbo Asiri Basinc Siniri Asildi";
+    return vehicleData;
+}
+
+
+
+
+DatabaseManager::DatabaseManager(QObject *parent) : QObject(parent), hEnv(NULL),hDbc(NULL),isConnected(false){
     if(SQLAllocHandle(SQL_HANDLE_ENV,SQL_NULL_HANDLE, &hEnv)==SQL_SUCCESS){
         SQLSetEnvAttr(hEnv,SQL_ATTR_ODBC_VERSION,(SQLPOINTER)SQL_OV_ODBC3,0);
     }

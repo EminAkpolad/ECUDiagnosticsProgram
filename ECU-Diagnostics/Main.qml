@@ -16,6 +16,12 @@ ApplicationWindow {
     property string activeCategory: "Hydraulic excavator"
     property string activeSubModel: "ZX-7"
 
+    property string detectedStatus: ""
+    property string detectedModel: ""
+    property string detectedFaultCode: ""
+    property string detectedDescription: ""
+    property bool isEcuConnected: false
+
     Component {
         id: mainSelectionPage
         Item {
@@ -205,6 +211,11 @@ ApplicationWindow {
                         anchors.centerIn: parent; spacing: 10
                         Label { text: "Active ECU Session Ready"; font.bold: true; font.pixelSize: 16; color: "#111827"; Layout.alignment: Qt.AlignHCenter }
                         Label { text: "Selected Machine: " + activeCategory + " (" + activeSubModel + ")"; font.pixelSize: 13; color: "#4B5563"; Layout.alignment: Qt.AlignHCenter }
+                        
+                        Label { text: isEcuConnected ? "ECU Bağlantısı Kuruldu" : "Cihaz Bekleniyor..." ; font.bold: true; font.pixelSize: 16; color: isEcuConnected ? "#15803D" : "#DC2626"; Layout.alignment: Qt.AlignHCenter }
+                        Label { text: "Algılanan Model: " + (detectedModel !== "" ? detectedModel : "Bilinmiyor"); font.pixelSize: 13; color: "#111827"; Layout.alignment: Qt.AlignHCenter }
+                        Label { text: "Aktif Arıza Kodu: " + (detectedFaultCode !== "" ? detectedFaultCode : "Yok"); font.bold: true; font.pixelSize: 13; color: "#DC2626"; Layout.alignment: Qt.AlignHCenter }
+                        Label { text: "Açıklama: " + (detectedDescription !== "" ? detectedDescription : "Tarama bekleniyor..."); font.pixelSize: 12; color: "#4B5563"; Layout.alignment: Qt.AlignHCenter }
                     }
                 }
             }
@@ -214,7 +225,6 @@ ApplicationWindow {
     ColumnLayout {
         anchors.fill: parent
         spacing: 0
-
 
         Rectangle {
             Layout.fillWidth: true
@@ -263,7 +273,6 @@ ApplicationWindow {
                 Item { Layout.fillWidth: true }
             }
         }
-
     
         StackView {
             id: stackView
@@ -271,7 +280,6 @@ ApplicationWindow {
             Layout.fillHeight: true
             initialItem: mainSelectionPage
         }
-
 
         Rectangle {
             Layout.fillWidth: true
@@ -322,8 +330,14 @@ ApplicationWindow {
                     }
 
                     onClicked: {
-                        console.log("Butona basıldı!")
-                        appController.merhabaYazdir()
+                        console.log("Bağlantı ve otomatik tarama başlatılıyor");
+                        var result = dbManager.scanAndDetectECU("ECU_SIGNATURE_99"); 
+                        detectedStatus = result.status;
+                        detectedModel = result.ecuModel;
+                        detectedFaultCode = result.faultCode;
+                        detectedDescription = result.description;
+                        isEcuConnected = (result.status === "Success");
+                        console.log("Veriler arayuze aktarildi");
                     }
                 }
             }

@@ -1,4 +1,3 @@
-
 cmake_minimum_required(VERSION 3.21)
 
 project(ECUDiagnostics VERSION 1.0 LANGUAGES CXX)
@@ -12,6 +11,8 @@ qt_standard_project_setup(REQUIRES 6.5)
 
 qt_add_executable(ECUDiagnostics
     main.cpp
+    database/DatabaseManager.cpp
+    database/DatabaseManager.h
 )
 
 qt_add_qml_module(ECUDiagnostics
@@ -23,4 +24,5 @@ qt_add_qml_module(ECUDiagnostics
 
 target_link_libraries(ECUDiagnostics
     PRIVATE Qt6::Quick
+    odbc32
 )
