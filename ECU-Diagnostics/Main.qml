@@ -330,14 +330,14 @@ ApplicationWindow {
                     }
 
                     onClicked: {
-                        console.log("Bağlantı ve otomatik tarama başlatılıyor");
-                        var result = dbManager.scanAndDetectECU("ECU_SIGNATURE_99"); 
-                        detectedStatus = result.status;
-                        detectedModel = result.ecuModel;
-                        detectedFaultCode = result.faultCode;
-                        detectedDescription = result.description;
-                        isEcuConnected = (result.status === "Success");
-                        console.log("Veriler arayuze aktarildi");
+                       console.log("Sanal kepçe soketi taraması başlatılıyor...");
+    var result = dbManager.scanAndDetectECU(); 
+    detectedStatus = result.status;
+    detectedModel = result.ecuModel;
+    detectedFaultCode = result.faultCode;
+    detectedDescription = result.description;
+    isEcuConnected = (result.status === "Success");
+    console.log("Sanal tarama tamamlandı, veriler ekranda!");
                     }
                 }
             }

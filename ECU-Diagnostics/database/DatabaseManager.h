@@ -28,7 +28,7 @@ public:
 
     bool fetchMachineCategories();
 
-    Q_INVOKABLE QVariantMap scanAndDetectECU(QString ecuSignature);
+    Q_INVOKABLE QVariantMap scanAndDetectECU();
 };
 
 #endif 
