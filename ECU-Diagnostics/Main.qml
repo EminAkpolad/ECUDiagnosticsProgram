@@ -331,13 +331,21 @@ ApplicationWindow {
 
                     onClicked: {
                        console.log("Sanal kepçe soketi taraması başlatılıyor...");
-    var result = dbManager.scanAndDetectECU(); 
-    detectedStatus = result.status;
-    detectedModel = result.ecuModel;
-    detectedFaultCode = result.faultCode;
-    detectedDescription = result.description;
-    isEcuConnected = (result.status === "Success");
-    console.log("Sanal tarama tamamlandı, veriler ekranda!");
+                        var result = dbManager.scanAndDetectECU(); 
+
+                        console.log("CPP status:" + result.status);
+
+                       if(result){
+                         detectedStatus = result.status;
+                        detectedModel = result.ecuModel;
+                        detectedFaultCode = result.faultCode;
+                        detectedDescription = result.description;
+                        isEcuConnected = (result.status === "Success");
+                        console.log("Sanal tarama tamamlandı, veriler ekranda!");
+                       }
+                       else{
+                        console.log("HATA cpp undefined return!!");
+                       }
                     }
                 }
             }

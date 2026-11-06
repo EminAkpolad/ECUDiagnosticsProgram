@@ -40,7 +40,6 @@ int main(int argc, char *argv[])
     {
         cout << "Error database not found" << endl;
     }
-
     QObject::connect(
         &engine,
         &QQmlApplicationEngine::objectCreationFailed,
