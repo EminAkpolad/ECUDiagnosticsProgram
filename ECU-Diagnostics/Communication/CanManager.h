@@ -1,29 +1,35 @@
 #pragma once
+
 #include <QObject>
 #include <QByteArray>
 #include <QVector>
+#include <QCanBusDevice>
+#include <cstdint>
 
-struct CanFrame{
+struct CanFrame {
     uint32_t arbitrationId;
     QByteArray data;
     bool isExtended;
 };
 
-class CanManager : public QObject{
+class CanManager : public QObject {
     Q_OBJECT
-    public:
-    explicit CanManager(QObject *parent=nullptr);
-    ~CanManager();
 
-    bool openChannel(const QString &deviceInterface);
+public:
+    explicit CanManager(QObject *parent = nullptr);
+    ~CanManager() override;
+
+    bool openChannel(const QString &deviceInterface, int bitrate = 250000);
     void closeChannel();
     bool sendFrame(const CanFrame &frame);
 
-    signals:
+signals:
     void frameReceived(const CanFrame &frame);
+    void errorOccurred(const QString &errorMessage); 
 
-
-    private:
-    void pollHardware();
-    bool m_isConnected=false;
+private slots:
+    void onFramesReceived(); 
+private:
+    QCanBusDevice *m_canDevice = nullptr;
+    bool m_isConnected = false;
 };
